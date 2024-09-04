@@ -2,8 +2,11 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using osu.Framework.Graphics.Primitives;
+using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Logging;
+using osu.Framework.Platform;
+using osu.Framework.Platform.SDL2;
 using osu.Framework.Platform.Windows.WinAPI;
 
 namespace osu.Framework.Utils
@@ -46,28 +49,11 @@ namespace osu.Framework.Utils
                     break;
             }
 
-            var bounds = new RectangleI();
-
-            // foreach (var display in displays)
-            // {
-            //     screenContainer.Add(createScreen(display, window.AsNonNull().CurrentDisplayBindable.Value.Index));
-            //     bounds = RectangleI.Union(bounds, new RectangleI(display.Bounds.X, display.Bounds.Y, display.Bounds.Width, display.Bounds.Height));
-            // }
-            //
-            // screenContainerOffset = bounds.Location;
-            //
-            // foreach (var box in screenContainer.Children)
-            // {
-            //     box.Position -= bounds.Location;
-            // }
-            //
-            // screenContainer.Size = bounds.Size;
-
             uint style = User32.GetWindowLong(windowHandle, User32.GWL_STYLE);
             style &= ~(User32.WS_CAPTION | User32.WS_THICKFRAME | User32.WS_BORDER);
 
             User32.SetWindowLong(windowHandle, User32.GWL_STYLE, style);
-            User32.SetWindowPos(windowHandle, IntPtr.Zero, x + 1920, y, width, height, 0x0040 | 0x0004 | 0x0001 | 0x0010 | 0x0020);
+            User32.SetWindowPos(windowHandle, IntPtr.Zero, x, y, width, height, 0x0040 | 0x0004 | 0x0001 | 0x0010 | 0x0020);
 
             Logger.Log($"Changed window parent to {parent}! progman: {progman} | workerw: {workerw}");
 
@@ -82,6 +68,16 @@ namespace osu.Framework.Utils
                 default:
                     return workerw;
             }
+        }
+
+        public static IntPtr SetParentToDesktop(ISDLWindow window, WindowParent parent, IEnumerable<Display> displays)
+        {
+            IntPtr windowHandle = ((SDL2Window)window).WindowHandle;
+            var nearestDisplay = displays.OrderBy(d => Math.Sqrt(Math.Pow(window.Position.X - d.Bounds.X, 2) + Math.Pow(window.Position.Y - d.Bounds.Y, 2))).First();
+            var left = Math.Abs(displays.OrderBy(d => d.Bounds.X).First().Bounds.X);
+            var top = Math.Abs(displays.OrderBy(d => d.Bounds.Y).First().Bounds.Y);
+
+            return SetParentToDesktop(windowHandle, parent, nearestDisplay.Bounds.X + left, nearestDisplay.Bounds.Y + top, nearestDisplay.Bounds.Width, nearestDisplay.Bounds.Height);
         }
     }
 

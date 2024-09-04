@@ -290,7 +290,7 @@ namespace osu.Framework.Platform.Windows
             SDL_SetWindowSize(SDLWindowHandle, newSize.Width, newSize.Height);
             Position = display.Bounds.Location;
 
-            WindowHelper.SetParentToDesktop(WindowHandle, WindowParent.WorkerW, Position.X, Position.Y, newSize.Width, newSize.Height);
+            WindowHelper.SetParentToDesktop(this, WindowParent.WorkerW, Displays);
 
             return newSize;
         }

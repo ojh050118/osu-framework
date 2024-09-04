@@ -11,7 +11,7 @@ using RectangleF = osu.Framework.Graphics.Primitives.RectangleF;
 
 namespace osu.Framework.Platform
 {
-    internal interface ISDLWindow : IWindow
+    public interface ISDLWindow : IWindow
     {
         event Action<JoystickButton> JoystickButtonDown;
         event Action<JoystickButton> JoystickButtonUp;

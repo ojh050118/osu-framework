@@ -23,6 +23,7 @@ namespace osu.Framework.Tests.Visual.Platform
         private readonly SpriteText currentClientSize = new SpriteText();
         private readonly SpriteText currentWindowMode = new SpriteText();
         private readonly SpriteText currentDisplay = new SpriteText();
+        private readonly SpriteText currentPosition = new SpriteText();
 
         private ISDLWindow? window;
         private readonly Bindable<WindowMode> windowMode = new Bindable<WindowMode>();
@@ -47,7 +48,8 @@ namespace osu.Framework.Tests.Visual.Platform
                             currentActualSize,
                             currentClientSize,
                             currentWindowMode,
-                            currentDisplay
+                            currentDisplay,
+                            currentPosition
                         },
                     }
                 }
@@ -108,6 +110,7 @@ namespace osu.Framework.Tests.Visual.Platform
             currentActualSize.Text = $"Window size: {window?.Size}";
             currentClientSize.Text = $"Client size: {window?.ClientSize}";
             currentDisplay.Text = $"Current Display: {window?.CurrentDisplayBindable.Value.Name}";
+            currentPosition.Text = $"Current position: {window?.Position}";
         }
     }
 }

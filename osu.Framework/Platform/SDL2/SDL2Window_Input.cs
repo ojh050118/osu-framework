@@ -19,7 +19,7 @@ using static SDL2.SDL;
 
 namespace osu.Framework.Platform.SDL2
 {
-    internal partial class SDL2Window
+    public partial class SDL2Window
     {
         private void setupInput(FrameworkConfigManager config)
         {

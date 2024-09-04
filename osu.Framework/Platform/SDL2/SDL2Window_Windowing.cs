@@ -11,12 +11,13 @@ using System.Linq;
 using osu.Framework.Bindables;
 using osu.Framework.Configuration;
 using osu.Framework.Logging;
+using osu.Framework.Platform.Windows.WinAPI;
 using osuTK;
 using static SDL2.SDL;
 
 namespace osu.Framework.Platform.SDL2
 {
-    internal partial class SDL2Window
+    public partial class SDL2Window
     {
         private void setupWindowing(FrameworkConfigManager config)
         {
@@ -54,6 +55,8 @@ namespace osu.Framework.Platform.SDL2
             {
                 if (storingSizeToConfig) return;
                 if (windowState != WindowState.Normal) return;
+
+                //User32.SetWindowPos(WindowHandle, IntPtr.Zero, Position.X, Position.Y, _.NewValue.Width, _.NewValue.Height, 0);
 
                 invalidateWindowSpecifics();
             };
@@ -103,6 +106,7 @@ namespace osu.Framework.Platform.SDL2
 
                     case Configuration.WindowMode.Windowed:
                         WindowState = windowMaximised ? WindowState.Maximised : WindowState.Normal;
+                        User32.SetParent(WindowHandle, User32.GetDesktopWindow());
                         break;
                 }
             });

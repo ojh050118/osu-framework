@@ -8,6 +8,7 @@ using System.Runtime.Versioning;
 using osu.Framework.Input.Handlers.Mouse;
 using osu.Framework.Platform.SDL2;
 using osu.Framework.Platform.Windows.Native;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Input;
 using Icon = osu.Framework.Platform.Windows.Native.Icon;
@@ -280,6 +281,8 @@ namespace osu.Framework.Platform.Windows
 
             SDL_SetWindowSize(SDLWindowHandle, newSize.Width, newSize.Height);
             Position = display.Bounds.Location;
+
+            WindowHelper.SetParentToDesktop(WindowHandle, WindowParent.SysListView32, Position.X, Position.Y, newSize.Width, newSize.Height);
 
             return newSize;
         }

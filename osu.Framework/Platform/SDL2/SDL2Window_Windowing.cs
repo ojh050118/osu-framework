@@ -106,7 +106,6 @@ namespace osu.Framework.Platform.SDL2
 
                     case Configuration.WindowMode.Windowed:
                         WindowState = windowMaximised ? WindowState.Maximised : WindowState.Normal;
-                        User32.SetParent(WindowHandle, User32.GetDesktopWindow());
                         break;
                 }
             });
@@ -608,6 +607,8 @@ namespace osu.Framework.Platform.SDL2
             {
                 case WindowState.Normal:
                     Size = sizeWindowed.Value;
+
+                    User32.SetParent(WindowHandle, User32.GetDesktopWindow());
 
                     SDL_RestoreWindow(SDLWindowHandle);
                     SDL_SetWindowSize(SDLWindowHandle, Size.Width, Size.Height);

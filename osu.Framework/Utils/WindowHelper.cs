@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using osu.Framework.Graphics.Primitives;
 using osu.Framework.Logging;
 using osu.Framework.Platform.Windows.WinAPI;
 
@@ -13,12 +14,10 @@ namespace osu.Framework.Utils
         {
             IntPtr progman = User32.FindWindow("progman", null);
             IntPtr result = IntPtr.Zero;
-
             IntPtr workerw = IntPtr.Zero;
             IntPtr listView = IntPtr.Zero;
 
             User32.SendMessageTimeout(progman, 0x052C, new IntPtr(0), IntPtr.Zero, 0x0, 1000, out result);
-
             User32.EnumWindows(new User32.EnumWindowsProc((topHandle, topParamHandle) =>
             {
                 IntPtr p = User32.FindWindowEx(topHandle, IntPtr.Zero, "SHELLDLL_DefView", null);
@@ -46,6 +45,23 @@ namespace osu.Framework.Utils
                     User32.SetParent(windowHandle, workerw);
                     break;
             }
+
+            var bounds = new RectangleI();
+
+            // foreach (var display in displays)
+            // {
+            //     screenContainer.Add(createScreen(display, window.AsNonNull().CurrentDisplayBindable.Value.Index));
+            //     bounds = RectangleI.Union(bounds, new RectangleI(display.Bounds.X, display.Bounds.Y, display.Bounds.Width, display.Bounds.Height));
+            // }
+            //
+            // screenContainerOffset = bounds.Location;
+            //
+            // foreach (var box in screenContainer.Children)
+            // {
+            //     box.Position -= bounds.Location;
+            // }
+            //
+            // screenContainer.Size = bounds.Size;
 
             uint style = User32.GetWindowLong(windowHandle, User32.GWL_STYLE);
             style &= ~(User32.WS_CAPTION | User32.WS_THICKFRAME | User32.WS_BORDER);
